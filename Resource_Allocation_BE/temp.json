@@ -1,0 +1,5 @@
+{"UserType":1,"ProcessorSpeed":1,"vCPUs":1,"RAM":1,"NetworkBandwidth":1,"Output":1}
+{"UserType":2,"ProcessorSpeed":2,"vCPUs":2,"RAM":2,"NetworkBandwidth":2,"Output":2}
+{"UserType":4,"ProcessorSpeed":2,"vCPUs":3,"RAM":3,"NetworkBandwidth":3,"Output":3}
+{"UserType":3,"ProcessorSpeed":3,"vCPUs":4,"RAM":3,"NetworkBandwidth":3,"Output":4}
+{"UserType":1,"ProcessorSpeed":4,"vCPUs":5,"RAM":4,"NetworkBandwidth":3,"Output":5}

@@ -1,0 +1,6 @@
+UserType,ProcessorSpeed,vCPUs,RAM,NetworkBandwidth,Output
+1,1,1,1,1,1
+2,2,2,2,2,2
+4,2,3,3,3,3
+3,3,4,3,3,4
+1,4,5,4,3,5
