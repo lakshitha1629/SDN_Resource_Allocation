@@ -14,6 +14,8 @@ def getTierOutput(USERTYPE,PROCESSORSPEED,CPU,RAM,NETWORK):
                 suggestion = df['Output'][a]
                 Output = tierSuggestion(suggestion)
         else:
+            suggestion = 0
+            Output = tierSuggestion(suggestion)
             print("Out of list")
     
         return Output
@@ -31,4 +33,4 @@ def tierSuggestion(suggestion):
         5: "Mt5.Prem",
     }
     
-    return switcher.get(suggestion, "nothing")
+    return switcher.get(suggestion, "Out of the range")
