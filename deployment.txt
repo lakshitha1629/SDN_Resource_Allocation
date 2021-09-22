@@ -2,7 +2,9 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-export FLASK_APP=application.py
+cd SDN_Resource_Allocation/Resource_Allocation_API
+
+export FLASK_APP=app.py
 # export FLASK_DEBUG=1 
 flask run -h 0.0.0.0
 
