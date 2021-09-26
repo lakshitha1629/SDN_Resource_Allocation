@@ -1,0 +1,13 @@
+13.68.168.106
+
+sdnvm-api.eastus.cloudapp.azure.com
+
+
+it18099928@my.sliit.lk
+n440*56S
+
+
+azureuser
+mobaxterm
+
+13.68.168.106
