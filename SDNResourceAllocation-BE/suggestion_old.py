@@ -1,5 +1,6 @@
 import tensorflow.keras as K
 import pandas as pd
+import mysql.connector
 
 def tierSuggestion(config):
     try:
@@ -41,9 +42,15 @@ def convertLogToJson(result):
     except KeyError:
         print('Execution Time: convert Log To Json --> KeyError')   
 
-def addDataToTheDataLog(mydb, tierType, IP_address):
+def addDataToTheDataLog(tierType, IP_address):
+    mydb = mysql.connector.connect(
+    host="database-1.ckbdn0ey3gu5.us-east-2.rds.amazonaws.com",
+    user="admin",
+    password="admin123",
+    database="sdnDB")
+    mycursor = mydb.cursor()
     sql = "INSERT INTO data_log (tierType, IP_address) VALUES (%s, %s)"
-    val = (tierType, str(IP_address))
+    val = (tierType, IP_address)
     mycursor.execute(sql, val)
     mydb.commit()
     return True

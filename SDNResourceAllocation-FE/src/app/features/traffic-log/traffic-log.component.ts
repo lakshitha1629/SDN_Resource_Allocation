@@ -26,12 +26,11 @@ export class TrafficLogComponent implements OnInit {
     private tierService: TierService) { }
 
   ngOnInit(): void {
-    this.getPredictTraffic();
   }
 
   ngAfterViewInit() {
     let count: number = 0;
-    interval(5000).subscribe(val => {
+    interval(10 * 1000).subscribe(val => {
       count = count + 1;
       this.getPredictTrafficAfter(count);
     });
@@ -39,33 +38,12 @@ export class TrafficLogComponent implements OnInit {
   }
 
   getPredictTrafficAfter(count: number) {
-    this.spinner.show();
     this.tierService.getPredictTraffic().subscribe({
       next: data => {
         const list = data;
         this.dataList = list.slice(0, count);
-        this.spinner.hide();
       },
       error: error => {
-        this.spinner.hide();
-        console.log(error);
-        this.toastr.error(error.error.detail);
-      }
-    });
-  }
-
-
-  getPredictTraffic() {
-    this.spinner.show();
-    this.tierService.getPredictTraffic().subscribe({
-      next: data => {
-        // show only first data in dataList
-        const list = data;
-        this.dataList = list.slice(0, 1)
-        this.spinner.hide();
-      },
-      error: error => {
-        this.spinner.hide();
         console.log(error);
         this.toastr.error(error.error.detail);
       }

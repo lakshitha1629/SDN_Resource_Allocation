@@ -18,7 +18,7 @@ export class TierService {
     return this.http.post<any>(`${environment.apiUrl}api/getSuggestion`, predictData);
   }
 
-  createTier(tierType: number) {
+  createTier(tierType: any) {
     return this.http.post<any>(`${environment.apiUrl}api/createTier`, tierType);
   }
 

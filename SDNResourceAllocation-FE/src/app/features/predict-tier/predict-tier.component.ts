@@ -41,7 +41,6 @@ export class PredictTierComponent implements OnInit {
     this.spinner.show();
     this.tierService.getSuggestion(predictData).subscribe({
       next: data => {
-        console.log(data.OutputValue);
         this.predictionResult = data.OutputValue;
         this.isPredictionResult = true;
         this.spinner.hide();
@@ -65,10 +64,14 @@ export class PredictTierComponent implements OnInit {
 
   createTier() {
     this.spinner.show();
-    this.tierService.createTier(1).subscribe({
+    const data =
+    {
+      tierType: this.predictionResult
+    }
+    this.tierService.createTier(data).subscribe({
       next: data => {
-        console.log(data);
         this.spinner.hide();
+        this.toastr.success('Successfully Create Tier');
       },
       error: error => {
         this.spinner.hide();

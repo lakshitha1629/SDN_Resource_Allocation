@@ -63,11 +63,9 @@ class CreateTier(Resource):
     def post(self):
         try:
             tierType = request.get_json()
-            print(tierType)
             IP_address = "192.168.20.10"
-            # print(data)
-            Output = suggestion_old.addDataToTheDataLog(mydb, int(tierType), IP_address)
-            return {Output}, 201
+            result = suggestion_old.addDataToTheDataLog(str(tierType['tierType']), str(IP_address))
+            return {'isResult': result}, 201
 
         except Exception as error:
             return {'error': error}
