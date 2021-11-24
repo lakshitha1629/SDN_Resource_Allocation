@@ -4,40 +4,23 @@ import os
 from time import sleep
 from ping3 import ping
 
- 
-
-# parse args
-parser = argparse.ArgumentParser(description='Monitoring script to send system info to a tracking server')
-parser.add_argument('-d', '--dest', default='142.250.4.138', help='API Endpoint for Monitoring Data (Defaults to http://localhost:8080/)')
-parser.add_argument('-i', '--interval', default=5, type=int, help='Interval between checks (Seconds. Defaults to 5 seconds)')
-parser.add_argument('-a', '--attempts', default=30, type=int, help='Attempts to send data when sending failes (Defaults to 30)')
-parser.add_argument('-t', '--timeout', default=60, type=int, help='Timeout between resend attempts (Seconds. Defaults to 60. If attempts is reached script will die)')
-args = parser.parse_args()
-
-# Factor in sleep for bandwidth checking
-if args.interval >= 2:
-    args.interval -= 2
-
 def main():
     # Hostname Info
     hostname = socket.gethostname()
-    print("Hostname:", hostname)
 
     # CPU Info
     cpu_count = psutil.cpu_count()
     cpu_usage = psutil.cpu_percent(interval=1)
-    print("CPU:\n\tCount:", cpu_count, "\n\tUsage:", cpu_usage)
 
     # Memory Info
     memory_stats = psutil.virtual_memory()
     memory_total = memory_stats.total
     memory_used = memory_stats.used
     memory_used_percent = memory_stats.percent
-    print("Memory:\n\tPercent:", memory_used_percent, "\n\tTotal:", memory_total / 1e+6, "MB", "\n\tUsed:", memory_used / 1e+6, "MB")
-
+    
     # Disk Info
     disk_info = psutil.disk_partitions()
-    print("Disks:")
+    
     disks = []
     for x in disk_info:
         # Try fixes issues with connected 'disk' such as CD-ROMS, Phones, etc.
@@ -53,17 +36,13 @@ def main():
 
             disks.append(disk)
 
-            print("\tDisk name",disk["name"], "\tMount Point:", disk["mount_point"], "\tType",disk["type"], "\tSize:", disk["total_size"] / 1e+9,"\tUsage:", disk["used_size"] / 1e+9, "\tPercent Used:", disk["percent_used"])
         except:
             print("")
 
     # Bandwidth Info
     network_stats = get_bandwidth()
-    print("Network:\n\tTraffic in:",network_stats["traffic_in"] / 1e+6,"\n\tTraffic out:",network_stats["traffic_out"] / 1e+6)
-
     # Network Info
     nics = []
-    print("NICs:")
     for name, snic_array in psutil.net_if_addrs().items():
         # Create NIC object
         nic = {
@@ -83,19 +62,16 @@ def main():
             elif snic.family == 23:
                 nic["address6"] = snic.address
         nics.append(nic)
-        print("\tNIC:",nic["name"], "\tMAC:", nic["mac"], "\tIPv4 Address:",nic["address"], "\tIPv4 Subnet:", nic["netmask"], "\tIPv6 Address:", nic["address6"])
-
+        
     # Platform Info
     system = {
         "name" : platform.system(),
         "version" : platform.release()
     }
-    print("OS:\n\t",system["name"],system["version"])
 
     # Time Info
     timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00")
     uptime = int(time.time() - psutil.boot_time())
-    print("System Uptime:\n\t",uptime)
 
     # System UUID
     sys_uuid = uuid.getnode()
@@ -117,6 +93,8 @@ def main():
         "network_cards": nics,
         "timestamp" : timestamp
     }
+    
+    return machine
 
 
 def get_bandwidth():
@@ -170,85 +148,3 @@ def send_data(data):
     else:
         # If no connection established for attempts*timeout, kill script
         exit(0)
-
-ip = socket.gethostbyname (socket.gethostname()) #getting ip-address of host
-
-print("\nRunning Protocols and ports:")
-
-for port in range(65535):      #check for all available ports
-
-    try:
-        serv = socket.socket(socket.AF_INET,socket.SOCK_STREAM) # create a new socket
-        serv.bind((ip,port)) # bind socket with address
-
-    except:
-        print('TCP        OPEN       ',port) #print open port number
-
-    serv.close()
-
-for port in range(65535):      #check for all available ports
-
-    try:
-        serv = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # create a new socket
-        serv.bind((ip,port)) # bind socket with address
-
-    except:
-        print('UDP        OPEN       ',port,) #print open port number
-
-    serv.close()
-
-print("-----------------------------------------------------------------\n")
-print("CPU usage, Disk usage and Memory usage:\n")
-
-a = True;
-while a:
-    main()
-    print("-----------------------------------------------------------------\n")
-    a=False
-    
-
-print("Average Delay time between links\n")
-
-THRESHOLD = 0.25  # 250 milliseconds is the Comcast SLA threshold.
-
-# SET YOUR PING INTERVAL HERE, IN SECONDS
-INTERVAL = 1
-
-# WHO SHOULD WE RUN THE PING TEST AGAINST
-DESTINATION = "142.250.4.138"  # "www.google.com"
-
-
-# LOG TO WRITE TO WHEN PINGS TAKE LONGER THAN THE THRESHOLD SET ABOVE
-i = datetime.datetime.now()
-log_file = "logs/latency-tester." + i.strftime("%Y.%m.%d.%H.%M.%S") + ".log"
-
-
-def write_to_file(file_to_write, message):
-    os.makedirs(os.path.dirname(file_to_write), exist_ok=True)
-    fh = open(file_to_write, "a")
-    fh.write(message + "\n")
-    fh.close()
-
-
-count = 0
-header = f"Pinging {DESTINATION} every {INTERVAL} secs; threshold: {THRESHOLD} secs."
-print(header)
-write_to_file(log_file, header)
-a = True
-while a:
-    count += 1
-    latency = ping(DESTINATION)
-
-    # Do we want to write it to the log?
-    write_log = "Yes" if latency > THRESHOLD else "No"
-    line = f"Pinged {DESTINATION}; latency: {latency} secs; logging: {write_log}"
-    print(line)
-    write_to_file(log_file, line)
-    if(count==5):
-       a=False
-    sleep(INTERVAL)
-
-
-
-if __name__ == '__main__':
-    main()
