@@ -1,0 +1,180 @@
+<div class="content-body">
+  <div class="row page-titles mx-0">
+    <div class="col p-md-0">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active">
+          <a>Resource Allocation Part</a>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <!-- row -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Tier Details List</h4>
+            <div class="table-responsive">
+              <table class="table header-border">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Tier Name</th>
+                    <th scope="col">Network Bandwidth</th>
+                    <th scope="col">User Type</th>
+                    <th scope="col">Processor Speed (Per processor)</th>
+                    <th scope="col">RAM</th>
+                    <th scope="col">vCPUs</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>1</th>
+                    <td>St1.Nano</td>
+                    <td>0-5 GBps</td>
+                    <td>1-100</td>
+                    <td>1GHz-2GHz</td>
+                    <td>16-32GB</td>
+                    <td>2 to 12</td>
+                  </tr>
+                  <tr>
+                    <th>2</th>
+                    <td>Mt2.GP</td>
+                    <td>20-50GBps</td>
+                    <td>101-1000</td>
+                    <td>2GHz-4GHz</td>
+                    <td>32-64GB</td>
+                    <td>12 to 20</td>
+                  </tr>
+                  <tr>
+                    <th>3</th>
+                    <td>Lt3.Large</td>
+                    <td>Above 50 GBps</td>
+                    <td>1-1000</td>
+                    <td>2GHz-4GHz</td>
+                    <td>Above 64GB</td>
+                    <td>20 to 32</td>
+                  </tr>
+                  <tr>
+                    <th>4</th>
+                    <td>Lt4.Xlarge</td>
+                    <td>Above 50 GBps</td>
+                    <td>Above 1000</td>
+                    <td>Above 4Hz</td>
+                    <td>Above 64GB</td>
+                    <td>12 to 32</td>
+                  </tr>
+                  <tr>
+                    <th>5</th>
+                    <td>Mt5.Prem</td>
+                    <td>Above 50 GBps</td>
+                    <td>1-100</td>
+                    <td>1GHz-4GHz</td>
+                    <td>16-64GB</td>
+                    <td>12 to 32</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12" *ngIf="!isPredictionResult">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Tier Prediction Form</h4>
+            <div class="basic-form">
+              <form [formGroup]="formGroup" (validSubmit)="onSubmit()">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Network Bandwidth</label>
+                    <select
+                      class="form-control"
+                      formControlName="networkBandwidth"
+                    >
+                      <option value="1">0-5 GBps</option>
+                      <option value="2">5-20 GBps</option>
+                      <option value="3">20-50GBps</option>
+                      <option value="4">Above 50 GBps</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>User Type</label>
+                    <select class="form-control" formControlName="userType">
+                      <option value="1">1-100</option>
+                      <option value="2">101-1000</option>
+                      <option value="3">1-1000</option>
+                      <option value="4">Above 1000</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Processor Speed (Per processor)</label>
+                    <select
+                      class="form-control"
+                      formControlName="processorSpeed"
+                    >
+                      <option value="1">1GHz-2GHz</option>
+                      <option value="2">2GHz-4GHz</option>
+                      <option value="3">Above 4Hz</option>
+                      <option value="4">1GHz-4GHz</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>RAM</label>
+                    <select class="form-control" formControlName="ram">
+                      <option value="1">16-32GB</option>
+                      <option value="2">32-64GB</option>
+                      <option value="3">Above 64GB</option>
+                      <option value="4">16-64GB</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>vCPUs</label>
+                    <select class="form-control" formControlName="vCPUs">
+                      <option value="1">2 to 12</option>
+                      <option value="2">12 to 20</option>
+                      <option value="3">20 to 32</option>
+                      <option value="4">12 to 32</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-dark">Predict</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12" *ngIf="isPredictionResult">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Prediction Result</h4>
+            <br />
+            <div class="alert alert-success" role="alert">
+              {{ predictionResult }}
+            </div>
+            <button
+              type="button"
+              class="btn btn-outline-warning"
+              (click)="clearData()"
+            >
+              Predict again
+            </button>
+            <button
+              type="button"
+              class="mx-1 btn btn-dark"
+              *ngIf="predictionResult != 'Out of the range'"
+              (click)="createTier()"
+            >
+              Create tier
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

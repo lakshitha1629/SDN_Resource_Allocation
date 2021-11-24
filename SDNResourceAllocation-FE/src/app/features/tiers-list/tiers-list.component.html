@@ -1,0 +1,149 @@
+<div class="content-body">
+  <div class="row page-titles mx-0">
+    <div class="col p-md-0">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active">
+          <a>Load Balancing Part</a>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <!-- row -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Created List Table</h4>
+            <div class="table-responsive table-new">
+              <table class="table header-border">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">IP Address</th>
+                    <th scope="col">Network Bandwidth</th>
+                    <th scope="col">RAM</th>
+                    <th scope="col">vCPUs</th>
+                    <th scope="col">Tier Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of dataList; let i = index">
+                    <th>{{ i + 1 }}</th>
+                    <td>{{ data.IP_address }}</td>
+                    <td>{{ data.NetworkBandwidth }}</td>
+                    <td>{{ data.RAM }}</td>
+                    <td>{{ data.vCPUs }}</td>
+                    <td>{{ data.tierType }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12" *ngIf="!isBestResult">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Select IPs Form</h4>
+            <div class="basic-form">
+              <form>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Select IPs </label>
+                    <ng-select
+                      #ngSelect
+                      [items]="dataList"
+                      [multiple]="true"
+                      [maxSelectedItems]="3"
+                      bindLabel="IP_address"
+                      placeholder="Select IPs"
+                      [searchFn]="dataSearchFn"
+                      [(ngModel)]="selectedItems"
+                      [ngModelOptions]="{ standalone: true }"
+                    >
+                      <ng-template
+                        ng-option-tmp
+                        let-item="item"
+                        let-search="searchTerm"
+                        let-clear="clear"
+                      >
+                        <div>
+                          <span [ngOptionHighlight]="search">
+                            {{ item.IP_address }} &#8594; {{ item.tierType }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                    <div
+                      class="alert alert-success mt-2"
+                      *ngIf="selectedItems.length === 3"
+                    >
+                      <small>Max selection reached</small>
+                    </div>
+                    <div
+                      class="alert alert-warning mt-2"
+                      *ngIf="selectedItems.length != 3"
+                    >
+                      <small>Please select 3 items </small>
+                    </div>
+                    <div class="mt-3">
+                      Selected value:
+                      <span *ngIf="selectedItems.length > 0">
+                        <button
+                          (click)="clearModel()"
+                          class="mx-2 btn btn-outline-secondary btn-sm"
+                        >
+                          <i class="fa fa-trash-o"></i>
+                        </button>
+                      </span>
+                      <br />
+                      <ul>
+                        <li *ngFor="let item of selectedItems">
+                          {{ item.IP_address }} -- {{ item.tierType }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  (click)="selectBestIP()"
+                >
+                  Get Best IP
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12" *ngIf="isBestResult">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Best Result</h4>
+            <br />
+            <div class="alert alert-success" role="alert">
+              <ul>
+                <li>IP Address &#8594; {{ tierData.IP_address }}</li>
+                <li>
+                  Network Bandwidth &#8594; {{ tierData.NetworkBandwidth }}
+                </li>
+                <li>RAM &#8594; {{ tierData.RAM }}</li>
+                <li>vCPUs &#8594; {{ tierData.vCPUs }}</li>
+                <li>Tier Type &#8594; {{ tierData.tierType }}</li>
+              </ul>
+            </div>
+            <button
+              type="button"
+              class="btn btn-outline-warning"
+              (click)="clearData()"
+            >
+              Clear Data
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
