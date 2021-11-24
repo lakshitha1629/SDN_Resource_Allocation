@@ -13,6 +13,7 @@ export class TiersListComponent implements OnInit {
   selectedItems = [];
   isBestResult: boolean = false;
   tierData: any;
+  result: any;
 
   constructor(
     private toastr: ToastrService,
@@ -38,46 +39,21 @@ export class TiersListComponent implements OnInit {
     });
   }
 
-  dataSearchFn(term: string, item: any) {
-    term = term.toLowerCase();
-    let splitTerm = term.split(' ').filter(t => t);
-    let isWordThere: any = [];
-    splitTerm.forEach(arr_term => {
-      let search = item['userFullAll'].toLowerCase();
-      isWordThere.push(search.indexOf(arr_term) != -1);
-    });
-    const all_words = (this_word: any) => this_word;
-
-    return isWordThere.every(all_words);
-  }
-
-  clearModel() {
-    this.selectedItems = [];
-  }
-
-
-  calculateMax() {
-    let total = 0;
-    this.selectedItems.forEach(item => {
-      item['total'] = item.vCPUs * 2 + item.NetworkBandwidth + item.RAM;
+  sendTraffic() {
+    this.spinner.show();
+    this.tierService.getTraffic().subscribe({
+      next: data => {
+        this.result = data.IP_Address;
+        this.spinner.hide();
+        this.isBestResult = true;
+      },
+      error: error => {
+        this.spinner.hide();
+        console.log(error);
+        this.toastr.error(error.error.detail);
+      }
     });
 
-    // get max total object in this.selectedItems
-    let max_total = Math.max.apply(null, this.selectedItems.map(function (obj) {
-      return obj.total;
-    }));
-
-    // get max tier object in this.selectedItems
-    let max_tier = this.selectedItems.find(obj => {
-      return obj.total == max_total;
-    });
-
-    return max_tier;
-  }
-
-  selectBestIP() {
-    this.tierData = this.calculateMax();
-    this.isBestResult = true;
   }
 
   clearData() {

@@ -2,6 +2,7 @@ from flask import Flask, request, redirect, jsonify
 from flask_restful import Resource, Api
 from flask_cors import CORS
 import suggestion_old
+import traffic
 import mysql.connector
 import warnings
 warnings.filterwarnings('ignore')
@@ -69,10 +70,20 @@ class CreateTier(Resource):
         except Exception as error:
             return {'error': error}
 
+class GetTraffic(Resource):
+    def get(self):
+        mycursor = mydb.cursor()
+        mycursor.execute("SELECT * FROM data_log")
+        myresult = mycursor.fetchall()
+        data = traffic.sendData(myresult)
+        return {'IP_Address': data}, 201
+
+
 api.add_resource(Test,'/')
 api.add_resource(GetSuggestion,'/api/getSuggestion')
 api.add_resource(GetAllList,'/api/getAllList')
 api.add_resource(CreateTier,'/api/createTier')
+api.add_resource(GetTraffic,'/api/getTraffic')
 
 if __name__ == '__main__':
     app.run(debug=True)
