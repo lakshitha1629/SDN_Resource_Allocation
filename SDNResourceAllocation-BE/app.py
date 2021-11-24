@@ -53,6 +53,7 @@ class GetAllList(Resource):
         mycursor = mydb.cursor()
         mycursor.execute("SELECT * FROM data_log")
         myresult = mycursor.fetchall()
+        print(myresult)
         dataList = suggestion_old.convertLogToJson(myresult)
         return jsonify(dataList)
 

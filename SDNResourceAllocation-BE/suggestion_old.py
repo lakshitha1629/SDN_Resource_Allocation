@@ -31,11 +31,12 @@ def convertLogToJson(result):
         VCPUS = [2,2,2,2,2]
         NETWORKBANDWIDTH = [5,5,5,5,5]
         for value in resultList:
+            VALUE=TIERTYPE.index(value[1])
             send_data = {}
-            send_data['tierType'] = TIERTYPE[value[1]]
-            send_data['NetworkBandwidth'] = NETWORKBANDWIDTH[value[1]]
-            send_data['RAM'] = RAM[value[1]]
-            send_data['vCPUs'] = VCPUS[value[1]]
+            send_data['tierType'] = TIERTYPE[VALUE]
+            send_data['NetworkBandwidth'] = NETWORKBANDWIDTH[VALUE]
+            send_data['RAM'] = RAM[VALUE]
+            send_data['vCPUs'] = VCPUS[VALUE]
             send_data['IP_address']  = value[2]
             send_data_arr.append(send_data)
         return send_data_arr
