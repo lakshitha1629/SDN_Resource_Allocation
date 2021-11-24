@@ -30,6 +30,13 @@ export class TierService {
     return this.http.get<any>(`${environment.apiUrl}api/getTraffic`);
   }
 
+  getFutureTraffic(year: any) {
+    return this.http.post<any>(`${environment.apiUrl}api/getFutureTraffic`, year);
+  }
+
+  getPredictTraffic(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}api/getPredictTraffic`);
+  }
 
 
 }

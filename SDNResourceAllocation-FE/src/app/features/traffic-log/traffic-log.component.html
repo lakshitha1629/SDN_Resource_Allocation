@@ -14,29 +14,86 @@
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title">Traffic Monitor Log</h4>
+            <h4 class="card-title">Live Traffic Prediction Log</h4>
             <div class="table-responsive table-new">
               <table class="table header-border">
                 <thead>
                   <tr>
                     <th scope="col">Packet #</th>
-                    <th scope="col">Date & Time</th>
+                    <!-- <th scope="col">Date & Time</th> -->
                     <th scope="col">MAC</th>
                     <th scope="col">IPv4</th>
-                    <th scope="col">TCP/UDP</th>
+                    <th scope="col">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th>1</th>
-                    <td>09.25.54</td>
-                    <td>0a:8f:42:f7:b4:ce &#8594; 0a:8f:42:f7:b4:ce</td>
-                    <td>172.31.47.223 &#8594; 172.31.47.223</td>
-                    <td>22 &#8594; 20772</td>
+                  <tr *ngFor="let data of dataList; let i = index">
+                    <th>{{ i + 1 }}</th>
+                    <!-- <td>{{ myDate | date: "mediumTime" }}</td> -->
+                    <td>{{ data.MAC }}</td>
+                    <td>{{ data.Public_IP }}</td>
+                    <td>
+                      <span class="badge badge-danger" *ngIf="data.Count > 9"
+                        >Network Traffic</span
+                      >
+                      <span class="badge badge-success" *ngIf="data.Count < 9"
+                        >Network Non-Traffic</span
+                      >
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6" *ngIf="!isResult">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Future Network Traffic Prediction</h4>
+            <div class="basic-form">
+              <form [formGroup]="formGroup" (validSubmit)="onSubmit()">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Select the Year (Upto):</label>
+                    <select class="form-control" formControlName="year">
+                      <option value="1">
+                        Predict network Traffic to 2 Years
+                      </option>
+                      <option value="2">
+                        Predict network Traffic to 4 Years
+                      </option>
+                      <option value="3">
+                        Predict network Traffic to 6 Years
+                      </option>
+                      <option value="4">
+                        Predict network Traffic to 8 Years
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-dark">Predict</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6" *ngIf="isResult">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Future Prediction Result</h4>
+            <br />
+
+            <img src="{{ resultImg }}" alt="Traffic" />
+            <br />
+            <hr />
+            <button
+              type="button"
+              class="btn btn-outline-warning"
+              (click)="clearData()"
+            >
+              Predict again
+            </button>
           </div>
         </div>
       </div>
