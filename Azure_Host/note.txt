@@ -17,3 +17,11 @@ user -azureuser
 192.168.56.1:3389
 
 netstat -na
+
+
++++++++++++++++++Azure Login++++++++++++++++++++++++
+
+user private key in advanced settings
+
+ip - 18.190.154.156
+user - ubuntu

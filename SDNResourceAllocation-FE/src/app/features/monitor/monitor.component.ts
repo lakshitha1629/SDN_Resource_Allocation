@@ -9,11 +9,27 @@ import { TierService } from 'src/app/core/service/tier.service';
   styleUrls: ['./monitor.component.scss']
 })
 export class MonitorComponent implements OnInit {
-
-  constructor() { }
+  monitorDetails: any;
+  constructor(
+    private spinner: NgxSpinnerService,
+    private tierService: TierService) { }
 
   ngOnInit(): void {
+    this.getCreatedList();
   }
 
+  getCreatedList() {
+    this.spinner.show();
+    this.tierService.getMonitorDetails().subscribe({
+      next: data => {
+        this.monitorDetails = data;
+        this.spinner.hide();
+      },
+      error: error => {
+        this.spinner.hide();
+        console.log(error);
+      }
+    });
+  }
 
 }

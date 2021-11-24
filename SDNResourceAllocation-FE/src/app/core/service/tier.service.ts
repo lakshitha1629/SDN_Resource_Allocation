@@ -22,5 +22,14 @@ export class TierService {
     return this.http.post<any>(`${environment.apiUrl}api/createTier`, tierType);
   }
 
+  getMonitorDetails(): Observable<any> {
+    return this.http.get<any>(`http://ec2-18-190-154-156.us-east-2.compute.amazonaws.com:5000/api/getMonitorDetails`);
+  }
+
+  getTraffic(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}api/getTraffic`);
+  }
+
+
 
 }

@@ -5,9 +5,13 @@ pip install -r requirements.txt
 git clone https://github.com/lakshitha1629/SDN_Resource_Allocation.git
 cd SDN_Resource_Allocation/GA_Resource_Allocation_API
 
+cd /home/ubuntu/SDN_Resource_Allocation/SDNMonitoring-BE/
+
 export FLASK_APP=app.py
 # export FLASK_DEBUG=1 
 flask run -h 0.0.0.0
 
 
 http://sdnvm-api.eastus.cloudapp.azure.com:5000/
+
+http://ec2-18-190-154-156.us-east-2.compute.amazonaws.com:5000/api/getMonitorDetails

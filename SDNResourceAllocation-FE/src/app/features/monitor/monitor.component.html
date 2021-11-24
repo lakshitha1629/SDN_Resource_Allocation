@@ -17,10 +17,12 @@
             <div class="media align-items-center mb-4">
               <div class="media-body">
                 <h3 class="mb-0">Server Monitor</h3>
-                <p class="text-muted mb-0">Public IP - 192.34.26.100</p>
+                <p class="text-muted mb-0">Public IP - 18.190.154.156</p>
+                <p class="text-muted mb-0">
+                  Time Stamp - {{ monitorDetails.timestamp | date: "medium" }}
+                </p>
               </div>
             </div>
-
             <div class="row mb-5">
               <div class="col mx-3">
                 <h6 class="text-muted">
@@ -31,14 +33,14 @@
                   <tbody>
                     <tr>
                       <th>HOSTNAME</th>
-                      <td>testserve</td>
+                      <td>{{ monitorDetails.hostname }}</td>
                     </tr>
                     <tr>
                       <th>CPU</th>
                       <td>
                         <ul>
-                          <li>Count: 2</li>
-                          <li>Usage: 0.0</li>
+                          <li>Count: {{ monitorDetails.cpu_count }}</li>
+                          <li>Usage: {{ monitorDetails.cpu_usage }}</li>
                         </ul>
                       </td>
                     </tr>
@@ -46,9 +48,11 @@
                       <th>MEMORY</th>
                       <td>
                         <ul>
-                          <li>Percent: 31.8</li>
-                          <li>Total: 4294.95MB</li>
-                          <li>Used: 1321.75MB</li>
+                          <li>
+                            Percent: {{ monitorDetails.memory_used_percent }}
+                          </li>
+                          <li>Total: {{ monitorDetails.memory_total }}MB</li>
+                          <li>Used: {{ monitorDetails.memory_used }}MB</li>
                         </ul>
                       </td>
                     </tr>
@@ -56,9 +60,16 @@
                       <th>DISK</th>
                       <td>
                         <ul>
-                          <li>
-                            Disk: dev/ploop3445pl | Mount Point:ext4 | Size:
-                            158.45 | Usage: 6.16 | Percent Used: 4.1
+                          <li
+                            *ngFor="
+                              let drive of monitorDetails.drives;
+                              let i = index
+                            "
+                          >
+                            Disk: {{ drive.name }} | Mount Point:
+                            {{ drive.type }} | Size: {{ drive.total_size }} |
+                            Usage: {{ drive.used_size }} | Percent Used:
+                            {{ drive.percent_used }}
                           </li>
                         </ul>
                       </td>
@@ -66,15 +77,35 @@
                     <tr>
                       <th>NETWORK</th>
                       <td>
+                        <ul
+                          *ngFor="
+                            let network of monitorDetails.network_cards;
+                            let i = index
+                          "
+                        >
+                          <li>address: {{ network.address }}</li>
+                          <li>name: {{ network.name }}</li>
+                          <li>netmask: {{ network.netmask }}</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>NETWORK</th>
+                      <td>
                         <ul>
-                          <li>Traffic in: 0.00208</li>
-                          <li>Traffic out: 8e-05</li>
+                          <li>Traffic in: {{ monitorDetails.network_up }}</li>
+                          <li>
+                            Traffic out: {{ monitorDetails.network_down }}
+                          </li>
                         </ul>
                       </td>
                     </tr>
                     <tr>
                       <th>OS</th>
-                      <td>Linux 2.6.32-696.10.1.el6.x86_64</td>
+                      <td>
+                        {{ monitorDetails.system.name }} -
+                        {{ monitorDetails.system.version }}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
